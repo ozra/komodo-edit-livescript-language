@@ -6,8 +6,9 @@ Got string and regular expression parsing decent - they drive me nuts in most
 highlighters I've come across.
 
 Known issues:
-- Operators don't highlight atm, in favour of dashes being coloured in
-  keywords. Fix coming.
+- dot-identifiers with same name as keywords still highlight like
+  keywords.
+- haven't looked in to indent hinting yet - it's only highlighting
 
 Please do contribute refinements!
 

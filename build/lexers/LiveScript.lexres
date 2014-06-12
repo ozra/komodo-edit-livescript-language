@@ -25,11 +25,11 @@
 19:1
 18:3
 19:0
-11:242
-12:!-> -> <- <-! Array Number Object String break case class continue die elif
-12: else elseif elsif extends false for from if in is isnt it let new no not n
-12:ull prototype require! return super that then this til to true typeof! unle
-12:ss when while yes
+11:245
+12:!-> -> <- <-! Array Number Object String break case class continue die do e
+12:lif else elseif elsif extends false for from if in is isnt it let new no no
+12:t null prototype require! return super that then this til to true typeof! u
+12:nless when while yes
 21
 22:45:44
 32:2
@@ -91,8 +91,14 @@
 12:[$_a-zA-Z\x80-\xff][$_a-zA-Z\x80-\xff\d\-]*
 36:2:31:45:0:-1:0:0:0
 40
-11:73
-12:[(!#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|]|([^\w]-[^\w])|(<[^\-~])|([^\-~]>))
+11:52
+12:(?<=[.@])[$_a-zA-Z\x80-\xff][$_a-zA-Z\x80-\xff\d\-]*
+36:2:31:45:0:-1:0:0:1
+40
+11:190
+12:([#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|]|#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|DAS
+12:H|#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|EXCL|#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|
+12:GT|#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|LT)
 36:2:31:46:0:-1:0:0:0
 40
 11:4

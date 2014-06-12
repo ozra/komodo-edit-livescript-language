@@ -3,7 +3,7 @@
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
     <Description about="urn:mozilla:install-manifest">
         <em:id>livescript_language@campbell.nu</em:id>
-        <em:name>livescript_language</em:name>
+        <em:name>LiveScript Higlighting</em:name>
         <em:version>0.45</em:version>
         <em:description>Syntax Highlighting etc. for LiveScript - the successor of CoffeeScript.</em:description>
         <em:creator>Oscar Campbell</em:creator>

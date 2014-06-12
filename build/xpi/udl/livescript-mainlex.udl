@@ -28,13 +28,13 @@ end_style SSL_VARIABLE
 keyword_style SSL_IDENTIFIER => SSL_WORD
 keywords [
         # Keywords
-        "class", "extends", "super", "if", "when", "then", "while", "for", "in",
+        "do", "class", "extends", "super", "if", "when", "then", "while", "for", "in",
         "else", "elseif", "elsif", "elif", "new", "from", "to", "til", "case",
         "it", "that", "this", "break", "continue", "die", "unless", "true", "false",
-        "null", "Array", "String", "Number", "Object", "prototype",
         "yes", "no", "is", "isnt", "not", "return",
         "require!", "typeof!",
         "let", "<-", "->", "!->", "<-!"
+        "null", "Array", "String", "Number", "Object", "prototype",
         ]
 
 # Set the basic patterns we'll be using for styling transitions.
@@ -43,8 +43,13 @@ keywords [
 pattern FIRSTNAMECHAR = '$_a-zA-Z\x80-\xff' # names (identifier, keyword, variable...) only can start with these chars
 pattern NAMECHAR = '$FIRSTNAMECHAR\d\-'      # rest of the name, after the first char
 pattern WS = '\s\t\r\n'                    # whitespace
+
 #pattern OP = '[(!#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|]|([^\w]-[^\w])|(<[^-~])|([^-~]>))'  # operator characters - escaping special regex values
-pattern OP = '(!#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|'  # operator characters - escaping special regex values
+pattern OP = '#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|'  # operator characters - escaping special regex values
+pattern OPEXCL = '(?<!<[-~])!(?![-~]>)'
+pattern OPDASH = '((?<=([^\w<]|^))-(?=([^\w>]|$)))'
+pattern OPLT = '(<(?=[^-~]))'
+pattern OPGT = '((?>=[^-~])>)'
 
 ################ Default Style ################
 
@@ -86,10 +91,11 @@ state IN_SSL_DEFAULT:
 # ----------- Entering Identifiers ---------- #
 
 /[$FIRSTNAMECHAR][$NAMECHAR]*/ : paint(upto, SSL_DEFAULT), paint(include, SSL_IDENTIFIER)
+/(?<=[.@])[$FIRSTNAMECHAR][$NAMECHAR]*/ : paint(upto, SSL_DEFAULT), paint(include, SSL_IDENTIFIER), no_keyword
 
 # ----------- Entering Operators ---------- #
 
-/[$OP]|([^\w]-[^\w])|(<[^\-~])|([^\-~]>))/ : paint(upto, SSL_DEFAULT), paint(include, SSL_OPERATOR)
+/([$OP]|$OPDASH|$OPEXCL|$OPGT|$OPLT)/ : paint(upto, SSL_DEFAULT), paint(include, SSL_OPERATOR)
 
 
 ################ In Comments - determines how we exit a comment ################

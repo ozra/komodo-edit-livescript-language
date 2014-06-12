@@ -17,6 +17,8 @@ BC.data.newPrimaryKey = let    # returnerar 12byte lång ObjectID i hexadecimalt
         foo.map -> it * 47
         if !(session.enumIdEncoded?) then session.enumIdEncoded = pad((session.user.enumid).toString(16), 6)
 
+        matched = foo.match /some[a-z/"']stuff/
+
         serial-counter++
 
         time = Math.round($time() / 1000).toString(16)    # sekund-baserad = 32 bitar

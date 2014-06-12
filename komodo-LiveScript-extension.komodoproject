@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="1b44a5a1-9e51-407d-b210-b39a4c56ab8a" kpf_version="5" name="komodo-LiveScript-extension.komodoproject">
+<preference-set idref="1b44a5a1-9e51-407d-b210-b39a4c56ab8a" id="project" preftype="project">
+  <boolean id="configured">1</boolean>
+  <string id="koextgen.target">komodolang</string>
+</preference-set>
+</project>

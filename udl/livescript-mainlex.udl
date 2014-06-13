@@ -25,31 +25,37 @@ start_style SSL_DEFAULT
 end_style SSL_VARIABLE
 
 # If the language has keywords, specify which style needs to be transformed
+
 keyword_style SSL_IDENTIFIER => SSL_WORD
 keywords [
-        # Keywords
-        "do", "class", "extends", "super", "if", "when", "then", "while", "for", "in",
-        "else", "elseif", "elsif", "elif", "new", "from", "to", "til", "case",
-        "it", "that", "this", "break", "continue", "die", "unless", "true", "false",
-        "yes", "no", "is", "isnt", "not", "return",
-        "require!", "typeof!",
-        "let", "<-", "->", "!->", "<-!"
-        "null", "Array", "String", "Number", "Object", "prototype",
+#        # Keywords
+#        "do", "class", "extends", "super", "if", "when", "then", "while", "for", "in",
+#        "else", "new", "from", "to", "til", "switch", "case",
+#        "it", "that", "this", "break", "continue", "die", "unless", "true", "false",
+#        "yes", "no", "is", "isnt", "not", "return",
+#        "require!", "typeof!",
+#        "let", "<-", "->", "!->", "<-!"
+#        "null", "Array", "String", "Number", "Object", "prototype",
         ]
+
+pattern KEYWORDS = '(do|class|extends|super|if|when|then|while|for|in|else|new|from|to|til|switch|case|it|that|this|break|continue|try|catch|throw|finally|die|unless|true|false|yes|no|is|isnt|not|return|require!|typeof!|require|typeof|let|<-|<-!|<~|<~!|->|!->|~>|!~>|prototype|void|null)'
+pattern KEYWORDS2 = '(Object|Array|String|Number|Error)'
 
 # Set the basic patterns we'll be using for styling transitions.
 # For most programming languages, names cannot start with a number, but they
 # often allow a number after the first character - e.g. "bar21a"
 pattern FIRSTNAMECHAR = '$_a-zA-Z\x80-\xff' # names (identifier, keyword, variable...) only can start with these chars
-pattern NAMECHAR = '$FIRSTNAMECHAR\d\-'      # rest of the name, after the first char
-pattern WS = '\s\t\r\n'                    # whitespace
+pattern NAMECHAR = '$FIRSTNAMECHAR\d\-'     # rest of the name, after the first char
+pattern WS = '\s\t\r\n'                     # whitespace
 
-#pattern OP = '[(!#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|]|([^\w]-[^\w])|(<[^-~])|([^-~]>))'  # operator characters - escaping special regex values
-pattern OP = '#%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|'  # operator characters - escaping special regex values
+pattern OP = '%&\(\)\*\+,\.\/:;=\?@\[\]\^\{\}~|'  # operator characters - escaping special regex values
 pattern OPEXCL = '(?<!<[-~])!(?![-~]>)'
 pattern OPDASH = '((?<=([^\w<]|^))-(?=([^\w>]|$)))'
 pattern OPLT = '(<(?=[^-~]))'
 pattern OPGT = '((?>=[^-~])>)'
+
+pattern KEYWORD = '(?<![NAMECHAR.\]\)\(@]|(::))$KEYWORDS(?![$NAMECHAR.\[]|(::)|(\s*:))'
+pattern KEYWORD2 = '(?<![NAMECHAR.\]\)\(@]|(::))$KEYWORDS2(?![$NAMECHAR.\[]|(::)|(\s*:))'
 
 ################ Default Style ################
 
@@ -88,15 +94,25 @@ state IN_SSL_DEFAULT:
 /[-+]?0[0-7]*/ : paint(upto, SSL_DEFAULT), paint(include, SSL_NUMBER)       # Octal numbers
 /[-+]?[1-9]+/ : paint(upto, SSL_DEFAULT), paint(include, SSL_NUMBER)        # Regular numbers
 
-# ----------- Entering Identifiers ---------- #
-
-/[$FIRSTNAMECHAR][$NAMECHAR]*/ : paint(upto, SSL_DEFAULT), paint(include, SSL_IDENTIFIER)
-/(?<=[.@])[$FIRSTNAMECHAR][$NAMECHAR]*/ : paint(upto, SSL_DEFAULT), paint(include, SSL_IDENTIFIER), no_keyword
-
 # ----------- Entering Operators ---------- #
 
 /([$OP]|$OPDASH|$OPEXCL|$OPGT|$OPLT)/ : paint(upto, SSL_DEFAULT), paint(include, SSL_OPERATOR)
 
+# ----------- Entering Keywords ---------- #
+
+/$KEYWORD/ : paint(upto, SSL_DEFAULT), paint(include, SSL_WORD)
+/$KEYWORD2/ : paint(upto, SSL_DEFAULT), paint(include, SSL_WORD)
+
+# ----------- Entering Identifiers ---------- #
+
+/[$FIRSTNAMECHAR][$NAMECHAR]*/ : paint(upto, SSL_DEFAULT), paint(include, SSL_IDENTIFIER)
+#/([.@]|(::))(?=[a-z])/ : paint(upto, SSL_DEFAULT), paint(include, SSL_OPERATOR), => IN_SSL_NON_KEYWORD_IDENTIFIER_1
+
+
+################ In Identifiers ################
+#
+#state IN_SSL_NON_KEYWORD_IDENTIFIER_1:
+#/[^$NAMECHAR]/ : paint(upto, SSL_IDENTIFIER), redo, no_keyword, => IN_SSL_DEFAULT
 
 ################ In Comments - determines how we exit a comment ################
 
